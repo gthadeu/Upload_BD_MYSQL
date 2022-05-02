@@ -24,17 +24,11 @@ public class DocStorageService {
 		try {
 			Doc doc = new Doc(docname, file.getContentType(), file.getBytes());
 			if (doc.getDocType().contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document")){
-				System.out.println("doc.getDocName = " + doc.getDocName());
+				String item = wordToPdf("C:\\ferraz\\anotacoes\\estudos\\Senac\\" + doc.getDocName());
+				doc.setDocType(item);
+				System.out.println("doc.getDocName() = " + doc.getDocName());
 				System.out.println("doc.getDocType() = " + doc.getDocType());
-				System.out.println("doc.toString() = " + doc.toString());
-				System.out.println("doc = " + doc);
-				System.out.println("docname = " + docname);
-				System.out.println("file.getContentType() = " + file.getContentType());
-				System.out.println("file.getOriginalFilename() = " + file.getOriginalFilename());
-				System.out.println("file.getBytes() = " + file.getBytes());
-				System.out.println("file = " + file);
-				;
-				wordToPdf("C:\\ferraz\\anotacoes\\estudos\\Senac\\" + doc.getDocName());
+
 			}
 			return docRepository.save(doc);
 		} catch (Exception e) {
