@@ -7,8 +7,8 @@
 <body>
    <div>
      <h3>Upload Multiple Files</h3>
-     <form id="uploadFiles" name="uploadFiles" method="post" th:action=@{/uploadFiles} encType="multipart/form-data">
-       <input type="file" name="files" multiple required />
+     <form id="uploadFiles" name="uploadFiles" method="post" th:action=@{/uploadFiles} encType="multipart/form-data" >
+       <input type="file" name="files" multiple required accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps" />
        <button type="submit">Submit</button>
      </form>
    </div>

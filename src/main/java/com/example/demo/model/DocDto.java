@@ -6,11 +6,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import java.util.Arrays;
 
 @Entity
 @Table(name="docs")
-public class Doc {
+public class DocDto {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
@@ -21,9 +20,9 @@ public class Doc {
 	@Lob
 	private byte[] data;
 	
-	public Doc() {}
+	public DocDto() {}
 
-	public Doc(String docName, String docType, byte[] data) {
+	public DocDto(String docName, String docType, byte[] data) {
 		super();
 		this.docName = docName;
 		this.docType = docType;
