@@ -1,20 +1,20 @@
 package com.example.demo.service;
+
 import com.example.demo.model.DocDto;
 import com.example.demo.repository.DocRepository;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class DocStorageService {
@@ -47,6 +47,8 @@ public class DocStorageService {
             Path path = Files.createTempFile("",file.getOriginalFilename());
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
             // create temporary folder
+            String[] list = {"C:\\Users\\Guilherme\\Downloads\\pdf\\1.pdf","C:\\Users\\Guilherme\\Downloads\\pdf\\2.pdf"};
+            mergePdf(list);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -56,10 +58,13 @@ public class DocStorageService {
         String docname = file.getOriginalFilename();
         try {
             DocDto doc = new DocDto(docname, file.getContentType(), file.getBytes());
+            String b64 = Base64.getEncoder().encodeToString(doc.getData());
             if (doc.getDocType().contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
                 String item = wordToPdf(docname);
             }
+            System.out.println("BASE64 =======>" + b64);
             return docRepository.save(doc);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +79,7 @@ public class DocStorageService {
         return docRepository.findAll();
     }
 
-    public String wordToPdf(String docname) {
+    public String wordToPdf(String docname) throws IOException {
 //        System.out.println("docname = " + docname);
 //        try {
 //            //InputStream docFile = new FileInputStream(new File("C:/Users/ferra/Downloads/senac.docx"));
@@ -97,5 +102,15 @@ public class DocStorageService {
         return "Error";
     }
 
+    public void mergePdf(String[] allFiles) throws IOException {
+        PDFMergerUtility ut = new PDFMergerUtility();
+        for (int i = 0; i < allFiles.length; i++) {
+            ut.addSource(allFiles[i]);
+//            Base64.getEncoder().encodeToString(allFiles[i].getBytes());
+            System.out.println("allfiles[" + i + "] = " + allFiles[i]);
+        }
+        ut.setDestinationFileName("C:\\Users\\Guilherme\\Downloads\\pdf\\merge.pdf");
+    }
+    
 }
 
